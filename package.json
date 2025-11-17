@@ -1,0 +1,12 @@
+{
+  "name": "shine-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "shine.js",
+  "scripts": {
+    "start": "node shine.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
