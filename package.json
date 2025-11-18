@@ -1,12 +1,17 @@
+
 {
-  "name": "node",
+  "name": "lottery-bot",
   "version": "1.0.0",
-  "type": "module",
+  "description": "CK Lottery 1-Min AI Prediction Bot",
   "main": "bot.js",
+  "type": "module",
   "scripts": {
     "start": "node bot.js"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2"
-  }
+    "express": "^4.18.2",
+    "node-fetch": "^3.4.1"
+  },
+  "author": "shinelinaung",
+  "license": "MIT"
 }
