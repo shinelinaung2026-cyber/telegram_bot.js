@@ -1,17 +1,12 @@
-
 {
-  "name": "lottery-bot",
+  "name": "telegram_bot",
   "version": "1.0.0",
-  "description": "CK Lottery 1-Min AI Prediction Bot",
-  "main": "bot.js",
   "type": "module",
+  "main": "shine_sync.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node shine_sync.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "node-fetch": "^3.4.1"
-  },
-  "author": "shinelinaung",
-  "license": "MIT"
+    "node-fetch": "3.3.2"
+  }
 }
