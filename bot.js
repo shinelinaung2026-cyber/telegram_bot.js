@@ -7,7 +7,7 @@ const BOT_TOKEN = "7513291825:AAGHKWei5eUTVjCsddg5X3_mf8VvNzLq8J4";
 const CHAT_ID = "@lionmyid0909";
 
 // === LOCAL PROXY CONFIG ===
-const PROXY_URL = "http://localhost/proxy.php";
+const PROXY_URL = "https://shineckhack.wuaze.com/proxy.php";
 
 // localhost হলে → "http://localhost/proxy.php"
 
