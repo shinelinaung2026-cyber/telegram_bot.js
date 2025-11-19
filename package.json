@@ -2,9 +2,9 @@
   "name": "telegram_bot",
   "version": "1.0.0",
   "type": "module",
-  "main": "shine_sync.js",
+  "main": "bot.js",
   "scripts": {
-    "start": "node shine_sync.js"
+    "start": "node bot.js"
   },
   "dependencies": {
     "node-fetch": "3.3.2"
