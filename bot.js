@@ -7,7 +7,7 @@ const BOT_TOKEN = "7513291825:AAGHKWei5eUTVjCsddg5X3_mf8VvNzLq8J4";
 const CHAT_ID = "@lionmyid0909";
 
 // === LOCAL PROXY CONFIG ===
-const PROXY_URL = "http://localhost:3000/proxy";
+const PROXY_URL = "http://localhost/proxy.php";
 
 // localhost হলে → "http://localhost/proxy.php"
 
