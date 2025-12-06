@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || https://node-server-js-49ix.onrender.com;
 const SECRET_KEY = process.env.SECRET_KEY || "CHANGE_THIS_SECRET_IN_PROD";
 
 // simple file DB paths
@@ -326,6 +326,6 @@ app.post("/api/updateOrder", (req, res) => {
 /* ---------------------------
    START SERVER
 ---------------------------- */
-http.listen(3000, () => {
-    console.log("Server running on port 3000");
+http.listen(https://node-server-js-49ix.onrender.com, () => {
+    console.log("https://node-server-js-49ix.onrender.com");
 });
