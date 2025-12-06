@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shine Works Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+<style>
+  :root{
+    --bg:#071026; 
+    --panel:#0b1420; 
+    --muted:#9aa6b2; 
+    --text:#e6eef8;
+    --glass: rgba(255,255,255,0.03);
+    --accent-a: linear-gradient(90deg,#6ee7f3,#00c7d9);
+    --accent-b: linear-gradient(90deg,#9ad0ff,#6b8cff);
+    --accent-c: linear-gradient(90deg,#ff9bbb,#ff6b87);
+    --accent-d: linear-gradient(90deg,#d9b8ff,#b08bff);
+    --card-radius:12px; 
+    --shadow:0 10px 30px rgba(2,6,23,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:Inter,system-ui,Arial;
+    background:linear-gradient(180deg,#061026,#071026);
+    color:var(--text)
+}
+
+  .app{
+    display:flex;
+    gap:40px;
+    min-height:100vh;
+    padding:22px
+
+}
+
+  /* Sidebar */
+  .sidebar{
+    width:220px;
+    background:linear-gradient(180deg,#071426,#041322);
+    border-radius:14px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:20px
+
+}
+
+  .logo{
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#8be7ff,#7ef2e7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;color:#062
+
+}
+  .menu{
+    display:flex;
+    flex-direction:column;
+    gap:20px
+
+  }
+
+
+  .menu a{
+    display:block;
+    padding:10px;
+    border-radius:10px;
+    color:var(--muted);
+    text-decoration:none;
+    margin-bottom:6px
+    
+
+}
+  
+  .menu a.active{
+    color:#fff;
+    background:rgba(255,255,255,0.02)
+
+}
+
+  .profile{
+    margin-top:auto;
+    display:flex;
+    gap:12px;
+    align-items:center
+
+}
+
+
+  .avatar{
+    width:48px;
+    height:48px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#ffb8c4,#ffcd8f);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    color:#2b0a1f
+
+}
+
+  /* Main */
+  .main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:18px
+
+}
+
+  .topbar{
+    display:flex;
+    gap:12px;
+    align-items:center
+
+}
+
+  .search{flex:1}
+
+  .search input{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    background:rgba(255,255,255,0.02);
+    color:var(--text)
+
+}
+
+  .cards{
+    height: 200px;
+    display:flex;
+    gap:12px
+
+  }
+
+  .card{
+    flex:1;
+    padding:16px;
+    border-radius:12px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    box-shadow:var(--shadow);
+    position:relative;
+    min-height:86px
+
+}
+  .card h5{margin:0;color:var(--muted);font-size:13px}
+  .card .value{margin-top:8px;font-weight:800;font-size:30px}
+  .card.c1{background:var(--accent-a)}
+  .card.c2{background:var(--accent-b)}
+  .card.c3{background:var(--accent-c)}
+  .card.c4{background:var(--accent-d)}
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 360px;
+    gap:36px
+
+}
+  
+  .panel{
+    background:var(--panel);
+    border-radius:12px;
+    padding:16px;
+    box-shadow:var(--shadow);
+    overflow:hidden
+
+}
+
+  .panel h3{
+    margin:0 0 8px 0;
+    font-size:16px
+}
+  .small{font-size:13px;
+    color:var(--muted)
+}
+
+  /* donut + legend */
+  .donutWrap{
+    display:flex;
+    gap:12px;
+    align-items:flex-start
+
+}
+  .donutCanvas{
+    width:140px;
+    height:140px
+}
+  .legend{flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:16px
+
+}
+
+  .legend .row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+
+}
+
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:8px
+
+}
+
+  /* transactions */
+  .tx-list{
+    margin-top:12px;
+    max-height:320px;
+    overflow:auto
+
+}
+
+  .tx-item{
+    display:flex;
+    justify-content:space-between;
+    padding:10px;
+    border-radius:10px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);
+    margin-bottom:8px
+
+}
+
+  .tx-left{
+    display:flex;
+    flex-direction:column
+
+}
+
+  .tx-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    color:var(--muted)
+}
+
+  /* overlay for server offline or login */
+  .overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(2,6,23,0.85);
+    z-index:9999;
+    color:#fff;
+    flex-direction:column;
+    gap:12px;
+
+  }
+
+  .btn{
+    padding:10px 14px;
+    border-radius:8px;
+    border:none;
+    background:#00c7d9;
+    color:#021;
+    cursor:pointer;
+    font-weight:700
+}
+
+  @media(max-width:1100px){.grid{grid-template-columns:1fr}.sidebar{display:none}}
+</style>
+</head>
+<body>
+    <!-- LOADING SPINNER -->
+<div id="loadingSpinner" style="
+  position:fixed;inset:0;background:rgba(2,6,23,0.88);
+  display:flex;align-items:center;justify-content:center;
+  z-index:99999;color:white;font-size:22px;flex-direction:column;gap:18px">
+  <div class="spin" style="
+    border:4px solid #ffffff33;border-top-color:#00e5ff;
+    width:60px;height:60px;border-radius:50%;
+    animation:spin 0.9s linear infinite;">
+  </div>
+  Loading...
+</div>
+<div class="app">
+  <aside class="sidebar">
+    <div style="display:flex;gap:12px;align-items:center"><div class="logo"></div><div><div style="font-weight:800">FinCheck</div><div class="small">Personal finance</div></div></div>
+    <nav class="menu" style="margin-top:8px">
+      <a class="active">Dashboard</a>
+      <a  class="active" href="page.html"><i class="fa-solid fa-wallet"></i> Order Detail</a>
+      <a class="active"><i class="fa-solid fa-exchange-alt"></i>Transactions</a>
+      <a class="active"><i class="fa-solid fa-credit-card"></i>Cards</a>
+      <a class="active"><i class="fa-solid fa-chart-line"></i> Statistics</a>
+    </nav>
+
+    <div class="profile">
+      <div class="avatar">SLA</div>
+      <div>
+        <div style="font-weight:700">Shine Lin Aung</div>
+        <div class="small">Welcome back</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="search"><input placeholder="Search orders, package, user..." /></div>
+      <div style="text-align:right">
+        <div class="small" id="serverStatus">Server: checking...</div>
+        <div style="margin-top:6px">Admin</div>
+      </div>
+    </div>
+
+    <!-- top stat cards -->
+    <div class="cards">
+      <div class="card c1">
+        <h3>Total Balance</h3>
+        <div class="value" id="card-balance">$0.00</div>
+      </div>
+      <div class="card c2">
+        <h3>Total Income</h3>
+        <div class="value" id="card-income">$0.00</div>
+      </div>
+      <div class="card c3">
+        <h3>Total Expenses</h3>
+        <div class="value" id="card-expenses">$0.00</div>
+      </div>
+      <div class="card c4">
+        <h3>Total Saving</h3>
+        <div class="value" id="card-saving">$0.00</div>
+      </div>
+    </div>
+
+    <!-- main -->
+    <div class="grid">
+      <section>
+        <div class="panel">
+          <h3>Total Income <span style="float:right;color:var(--muted)" id="sixTotalLabel">$0.00</span></h3>
+          <div style="height:260px">
+            <canvas id="incomeLine" style="width:100%;height:100%"></canvas>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px">
+            <div class="small">Last 6 months</div>
+            <div class="small" id="incomeNowLabel">$0.00</div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:16px">
+          <h3>Total Order history</h3>
+          <div class="tx-list" id="txList"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <h3>Activity <span style="float:right;font-weight:800" id="activityTotal">$0.00</span></h3>
+
+          <div class="donutWrap" style="margin-top:12px">
+            <div class="donutCanvas"><canvas id="miniDonut" width="140" height="140"></canvas></div>
+            <div class="legend" id="donutLegend"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:16px">
+    <h3 style="margin-bottom:12px">My Goals</h3>
+
+    <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between">
+            <span>Travel</span>
+            <span class="muted">50%</span>
+        </div>
+        <div style="height:10px;background:rgba(255,255,255,0.05);border-radius:999px;margin-top:4px;overflow:hidden">
+            <div style="width:50%;height:100%;background:linear-gradient(90deg,#7ef2e7,#00c7d9)"></div>
+        </div>
+    </div>
+
+    <div style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between">
+            <span>Car</span>
+            <span class="muted">20%</span>
+        </div>
+        <div style="height:10px;background:rgba(255,255,255,0.05);border-radius:999px;margin-top:4px;overflow:hidden">
+            <div style="width:20%;height:100%;background:linear-gradient(90deg,#9ad0ff,#6b8cff)"></div>
+        </div>
+    </div>
+
+    <div style="margin-top:14px">
+        <div style="display:flex;justify-content:space-between">
+            <span>New Phone</span>
+            <span class="muted">70%</span>
+        </div>
+        <div style="height:10px;background:rgba(255,255,255,0.05);border-radius:999px;margin-top:4px;overflow:hidden">
+            <div style="width:70%;height:100%;background:linear-gradient(90deg,#ffb7f5,#e56dff)"></div>
+        </div>
+    </div>
+</div>
+
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- Overlay used when server offline or not authorized -->
+<div id="sysOverlay" style="display:none" class="overlay">
+  <div style="font-size:20px;font-weight:700">Server unavailable</div>
+  <div class="small" id="overlayMsg">Please start backend server or login.</div>
+  <div style="display:flex;gap:12px">
+    <button class="btn" id="retryBtn">Retry</button>
+    <button class="btn" id="loginBtn">Go to Login</button>
+  </div>
+</div>
+
+<script>
+/* Final merged script:
+   - EXACT third-dashboard logic behavior:
+     * require token (redirect if missing)
+     * fetch /admin/orders with Authorization
+     * if fetch fails or returns non-ok => show overlay (server offline)
+     * else render charts & cards & list
+*/
+
+const FX = 3600;
+const chartColors = ["#4ade80","#60a5fa","#c084fc","#f472b6","#fb923c","#facc15","#2dd4bf","#86efac","#93c5fd","#f9a8d4"];
+const el = id => document.getElementById(id);
+const fmtUSD = n => "$" + Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+// Helper to show overlay
+function showOverlay(msg, requireLogin = false){
+  const o = el('sysOverlay');
+  if(!o) return;
+  el('overlayMsg').innerText = msg || 'Server offline';
+  o.style.display = 'flex';
+  el('retryBtn').style.display = requireLogin ? 'none' : 'inline-block';
+  el('loginBtn').style.display = requireLogin ? 'inline-block' : 'inline-block';
+}
+
+// hide overlay
+function hideOverlay(){ const o = el('sysOverlay'); if(o) o.style.display = 'none'; }
+
+// token check and start
+async function boot(){
+  // check token like third-dashboard
+  const token = localStorage.getItem('adminToken');
+  if(!token){
+    // keep same behavior as third-dashboard: redirect to login
+    window.location.href = 'admin-login.html';
+    return;
+  }
+  // try load data
+  await loadAndRender(token);
+}
+
+async function loadAndRender(token){
+  // optimistic UI
+  el('serverStatus').innerText = 'Server: connecting...';
+  hideOverlay();
+
+  let res;
+  try{
+    res = await fetch('https://api.render.com/deploy/srv-d4q1grndiees7391ijqg?key=9HvqZulcg9E', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+  }catch(err){
+    console.warn('Fetch failed', err);
+    el('serverStatus').innerText = 'Server: offline';
+    showOverlay('Cannot connect to backend server. Start server and press Retry.');
+    return;
+  }
+
+  if(!res.ok){
+    console.warn('Server returned non-ok', res.status);
+    el('serverStatus').innerText = 'Server: error ' + res.status;
+    if(res.status === 401 || res.status === 403){
+      // unauthorized -> go to login
+      showOverlay('Not authorized. Please login.', true);
+    } else {
+      showOverlay('Server error ' + res.status + '. Retry when available.');
+    }
+    return;
+  }
+
+  // OK -> got data
+  el('serverStatus').innerText = 'Server: online';
+  hideOverlay();
+  const orders = await res.json();
+
+  // now render
+  renderAll(orders);
+}
+document.getElementById("loadingSpinner").style.display = "none";
+function renderAll(orders){
+  // SUMMARY totals (MMK -> USD)
+  const totalMMK = orders.reduce((s,o)=> s + (Number(o.price || o.amount) || 0), 0);
+  const totalUSD = totalMMK / FX;
+  const incomeUSD = totalUSD * 0.20;
+  const expenseMMK = orders.filter(o => (o.status||'').toLowerCase() === 'cancelled')
+                           .reduce((s,o)=> s + (Number(o.price || o.amount) || 0), 0);
+  const expenseUSD = expenseMMK / FX;
+  const savingUSD = totalUSD - expenseUSD;
+
+  if(el('card-balance')) el('card-balance').innerText = fmtUSD(totalUSD);
+  if(el('card-income')) el('card-income').innerText = fmtUSD(incomeUSD);
+  if(el('card-expenses')) el('card-expenses').innerText = fmtUSD(expenseUSD);
+  if(el('card-saving')) el('card-saving').innerText = fmtUSD(savingUSD);
+  if(el('activityTotal')) el('activityTotal').innerText = fmtUSD(totalUSD);
+
+  // transactions
+  if(el('txList')){
+    const tx = el('txList');
+    tx.innerHTML = '';
+    const recent = orders.slice().reverse().slice(0,12);
+    recent.forEach(o=>{
+      const usd = (Number(o.price || o.amount) || 0) / FX;
+      const node = document.createElement('div');
+      node.className = 'tx-item';
+      node.innerHTML = `
+        <div class="tx-left">
+          <div style="font-weight:700">${o.username || o.receiver || o.player || 'Unknown'}</div>
+          <div class="small">${o.packageName || o.product || '-'}</div>
+        </div>
+        <div class="tx-right">
+          <div style="font-weight:700">${fmtUSD(usd)}</div>
+          <div class="small">${o.paymentMethod || '-'}</div>
+        </div>
+      `;
+      tx.appendChild(node);
+    });
+  }
+
+  // donut (package counts)
+  const counts = {};
+  orders.forEach(o=>{
+    const k = o.packageName || o.product || 'Unknown';
+    counts[k] = (counts[k] || 0) + 1;
+  });
+  const labels = Object.keys(counts);
+  const data = Object.values(counts);
+  const totalCount = data.reduce((s,n)=> s + n, 0) || 1;
+
+  // legend
+  if(el('donutLegend')){
+    const legend = el('donutLegend');
+    legend.innerHTML = '';
+    labels.forEach((name,i)=>{
+      const color = chartColors[i % chartColors.length];
+      const pct = Math.round((data[i] / totalCount) * 100);
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<div style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:${color}"></div><div>${name}</div></div><div style="font-weight:700;color:#fff">${pct}%</div>`;
+      legend.appendChild(row);
+    });
+  }
+
+  // draw donut
+  if(el('miniDonut')){
+    const ctx = el('miniDonut').getContext('2d');
+    if(window._miniDonut) try{ window._miniDonut.destroy(); }catch(e){}
+    window._miniDonut = new Chart(ctx, {
+      type: 'doughnut',
+      data: { labels: labels, datasets: [{ data: data, backgroundColor: labels.map((_,i)=>chartColors[i%chartColors.length]), borderWidth:0 }] },
+      options: { cutout: '78%', plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false }
+    });
+  }
+
+  // 6-month line
+  const months = 6;
+  const monthly = Array.from({length: months}, ()=>0);
+  const now = new Date();
+  orders.forEach(o=>{
+    const d = new Date(o.createdAt || o.date || Date.now());
+    const diff = (now.getFullYear() - d.getFullYear())*12 + (now.getMonth() - d.getMonth());
+    if(diff >= 0 && diff < months){
+      monthly[months-1-diff] += (Number(o.price || o.amount) || 0) / FX;
+    }
+  });
+
+  if(el('sixTotalLabel')) el('sixTotalLabel').innerText = fmtUSD(monthly.reduce((s,n)=>s+n,0));
+  if(el('incomeNowLabel')) el('incomeNowLabel').innerText = fmtUSD(monthly[months-1] || 0);
+
+if (el('incomeLine')) {
+    const ctx2 = el('incomeLine').getContext('2d');
+
+    if (window._incomeLine) {
+        try { window._incomeLine.destroy(); } catch(e){}
+    }
+
+    const labelsMonths = [...Array(months)].map((_, i) => {
+        const d = new Date();
+        d.setMonth(d.getMonth() - (months - 1 - i));
+        return d.toLocaleString(undefined, { month: 'short' });
+    });
+
+    window._incomeLine = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: labelsMonths,
+            datasets: [{
+                data: monthly,
+                tension: 0.38,                 // smooth curve (VERY IMPORTANT)
+                borderColor: "#ffcd8f",        // same as third-dashboard
+                backgroundColor: "#d9b8ff",  // soft green fill
+                fill: true,                   
+                pointRadius: 3,
+                pointBackgroundColor: "#4ade80",
+                pointBorderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 1500,         // animation time
+                easing: "easeInOutQuart" // smooth animation (IMPORTANT)
+            },
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    ticks: { color: "#cbd5e1" },
+                    grid: { color: "rgba(255,255,255,0.05)" }
+                },
+                y: {
+                    ticks: { color: "#cbd5e1" },
+                    grid: { color: "rgba(255,255,255,0.05)" }
+                }
+            }
+        }
+    });
+}
+
+}
+
+/* Boot behavior */
+document.getElementById('retryBtn').addEventListener('click', ()=> {
+  hideOverlay();
+  boot();
+});
+document.getElementById('loginBtn').addEventListener('click', ()=> {
+  window.location.href = 'admin-login.html';
+});
+
+// start
+document.addEventListener('DOMContentLoaded', ()=> {
+  boot();
+});
+/* AUTO REFRESH EVERY 10 SECONDS */
+setInterval(() => {
+    boot(); // << this reloads charts, totals, transactions
+}, 10000);
+
+
+</script>
+</body>
+</html>
